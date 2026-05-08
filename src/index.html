@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="./styles/main.scss" />
   </head>
   <body>
-    <div class="header">
-      <div class="header__game">
+    <main class="app">
+
+      <header class="header">
         <div class="header__controls">
           <h1>2048</h1>
 
@@ -17,11 +18,11 @@
             Current score:
             <span class="header__score">0</span>
           </p>
-          <button class="header__button header__button--start">Start</button>
+          <button class="header__button header__button--start" type="button">Start</button>
         </div>
-      </div>
+      </header>
 
-      <div class="game-board">
+      <section class="game-board" aria-label="Game board">
         <div class="game-container">
           <div class="game-cell"></div>
           <div class="game-cell"></div>
@@ -41,16 +42,16 @@
           <div class="game-cell"></div>
         </div>
         <div class="tile-container"></div>
-      </div>
+      </section>
 
-      <div class="message-container">
+      <section class="message-container" aria-live="polite">
         <p class="message message-lose hidden">You lose! Restart the game?</p>
         <p class="message message-win hidden">Winner! Congrats! You did it!</p>
         <p class="message message-start">
           Press "Start" to begin game. Good luck!
         </p>
-      </div>
-    </div>
+      </section>
+    </main>
     <script type="module" src="scripts/main.js"></script>
   </body>
 </html>
