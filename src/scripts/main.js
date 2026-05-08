@@ -1,97 +1,208 @@
 'use strict';
 
-const Game = require('../modules/Game.class');
+const Game = require('../modules/Game.class.js');
+
 const game = new Game();
 
-const score = document.querySelector('.game-score');
-const cells = [...document.querySelectorAll('.field-cell')];
-const messages = [...document.querySelectorAll('.message')];
-const start = document.querySelector('.start');
+const elements = {
+  score: document.querySelector('.header__score'),
+  tileContainer: document.querySelector('.tile-container'),
+  gameBoard: document.querySelector('.game-board'),
+  startButton: document.querySelector('.header__button--start'),
+  messages: [...document.querySelectorAll('.message')],
+  winMessage: document.querySelector('.message-win'),
+  loseMessage: document.querySelector('.message-lose'),
+};
 
-const winMessage = document.querySelector('.message-win');
-const loseMessage = document.querySelector('.message-lose');
+const CLASSES = {
+  BUTTON_START: 'header__button--start',
+  BUTTON_RESTART: 'header__button--restart',
+  TILE: 'tile',
+  TILE_NEW: 'tile-new',
+  TILE_MERGED: 'tile-merged',
+  HIDDEN: 'hidden',
+};
+
+const touchStart = {
+  x: 0, y: 0,
+};
+
+function setTileAttributes(tile, value, col, row) {
+  tile.textContent = value.value;
+
+  tile.className = [
+    CLASSES.TILE,
+    `tile--${value.value}`,
+    `tile-position-${col}-${row}`,
+  ].join(' ');
+}
+
+function handleMergedTile(value, col, row, activeIds) {
+  if (!value.mergedId) {
+    return;
+  }
+
+  const deadTile = document.getElementById(value.mergedId);
+
+  if (deadTile) {
+    deadTile.className = [
+      CLASSES.TILE,
+      `tile--${deadTile.textContent}`,
+      `tile-position-${col}-${row}`,
+    ].join(' ');
+
+    activeIds.push(value.mergedId);
+    setTimeout(() => deadTile.remove(), 150);
+  }
+
+  return true;
+}
 
 function drawGame() {
   const board = game.getState();
 
-  score.textContent = game.getScore();
+  elements.score.textContent = game.getScore();
 
-  for (let i = 0; i < cells.length; i++) {
-    const row = Math.floor(i / 4);
-    const col = i % 4;
-    const value = board[row][col];
+  const activeIds = [];
 
-    cells[i].className = 'field-cell';
+  board.forEach((rowArr, row) => {
+    rowArr.forEach((value, col) => {
+      if (value === 0) {
+        return;
+      }
 
-    if (value > 0) {
-      cells[i].textContent = value;
-      cells[i].classList.add('field-cell--' + value);
-    } else {
-      cells[i].textContent = '';
-    }
+      activeIds.push(value.id);
+
+      let tile = document.getElementById(value.id);
+
+      if (!tile) {
+        tile = document.createElement('div');
+        tile.id = value.id;
+        setTileAttributes(tile, value, col, row);
+        elements.tileContainer.appendChild(tile);
+        tile.classList.add(CLASSES.TILE_NEW);
+      } else {
+        setTileAttributes(tile, value, col, row);
+      }
+
+      if (handleMergedTile(value, col, row, activeIds)) {
+        tile.style.zIndex = 10;
+        tile.classList.add(CLASSES.TILE_MERGED);
+        setTimeout(() => tile.classList.remove(CLASSES.TILE_MERGED), 200);
+        delete value.mergedId;
+      }
+    });
+  });
+
+  elements.tileContainer
+    .querySelectorAll(`.${CLASSES.TILE}`)
+    .forEach((tile) => {
+      if (!activeIds.includes(tile.id)) {
+        tile.remove();
+      }
+    });
+}
+
+function showStatusMessage(status) {
+  elements.messages.forEach((m) => m.classList.add(CLASSES.HIDDEN));
+
+  if (status === 'win') {
+    elements.winMessage.classList.remove(CLASSES.HIDDEN);
+  }
+
+  if (status === 'lose') {
+    elements.loseMessage.classList.remove(CLASSES.HIDDEN);
   }
 }
 
-start.addEventListener('click', (e) => {
-  e.preventDefault();
+function updateButtonToRestart() {
+  if (elements.startButton.classList.contains(CLASSES.BUTTON_START)) {
+    elements.startButton.classList.replace(
+      CLASSES.BUTTON_START,
+      CLASSES.BUTTON_RESTART,
+    );
+    elements.startButton.textContent = 'Restart';
+  }
+}
 
-  messages.forEach((message) => message.classList.add('hidden'));
+elements.startButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  elements.messages.forEach((m) => m.classList.add(CLASSES.HIDDEN));
 
-  if (start.classList.contains('start')) {
+  if (elements.startButton.classList.contains(CLASSES.BUTTON_START)) {
     game.start();
-    start.classList.replace('start', 'restart');
-    start.textContent = 'Restart';
+    updateButtonToRestart();
   } else {
     game.restart();
     game.start();
   }
-
-  drawGame(cells);
+  drawGame();
 });
 
-document.addEventListener('keydown', (e) => {
-  e.preventDefault();
+document.addEventListener('keydown', (event) => {
+  const keyMap = {
+    ArrowUp: () => game.moveUp(),
+    ArrowDown: () => game.moveDown(),
+    ArrowLeft: () => game.moveLeft(),
+    ArrowRight: () => game.moveRight(),
+  };
 
-  const gameStatus = game.getStatus();
-
-  if (gameStatus !== 'playing') {
+  if (!keyMap[event.key] || game.getStatus() !== 'playing') {
     return;
   }
 
-  let isChanged = false;
+  event.preventDefault();
 
-  if (e.key === 'ArrowUp') {
-    isChanged = game.moveUp();
-  }
-
-  if (e.key === 'ArrowDown') {
-    isChanged = game.moveDown();
-  }
-
-  if (e.key === 'ArrowLeft') {
-    isChanged = game.moveLeft();
-  }
-
-  if (e.key === 'ArrowRight') {
-    isChanged = game.moveRight();
-  }
-
-  if (isChanged) {
-    drawGame(cells);
-
-    if (start.classList.contains('start')) {
-      start.classList.replace('start', 'restart');
-      start.textContent = 'Restart';
-    }
-  }
-
-  const currentStatus = game.getStatus();
-
-  if (currentStatus !== 'playing') {
-    if (currentStatus === 'win') {
-      winMessage.classList.remove('hidden');
-    } else if (currentStatus === 'lose') {
-      loseMessage.classList.remove('hidden');
-    }
+  if (keyMap[event.key]()) {
+    drawGame();
+    updateButtonToRestart();
+    showStatusMessage(game.getStatus());
   }
 });
+
+elements.gameBoard.addEventListener(
+  'touchstart',
+  (event) => {
+    touchStart.x = event.touches[0].screenX;
+    touchStart.y = event.touches[0].screenY;
+  },
+  { passive: true },
+);
+
+elements.gameBoard.addEventListener(
+  'touchend',
+  (event) => {
+    const dx = event.changedTouches[0].screenX - touchStart.x;
+    const dy = event.changedTouches[0].screenY - touchStart.y;
+    const threshold = 30;
+
+    if (Math.abs(dx) <= threshold && Math.abs(dy) <= threshold) {
+      return;
+    }
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      dx > 0 ? game.moveRight() : game.moveLeft();
+    } else {
+      dy > 0 ? game.moveDown() : game.moveUp();
+    }
+
+    drawGame();
+    showStatusMessage(game.getStatus());
+  },
+  { passive: true },
+);
+
+function init() {
+  const status = game.getStatus();
+
+  if (status === 'idle') {
+    return;
+  }
+
+  elements.messages.forEach((m) => m.classList.add(CLASSES.HIDDEN));
+  updateButtonToRestart();
+  drawGame();
+  showStatusMessage(status);
+}
+
+init();
