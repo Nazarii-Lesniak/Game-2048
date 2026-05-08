@@ -19,6 +19,13 @@ body {
   font-weight: 900;
 }
 
+.app {
+  @include flex-center;
+
+  flex-direction: column;
+  width: $board-width;
+}
+
 h1 {
   background: $color-gold;
   color: $text-light;

@@ -4,19 +4,11 @@
 .header {
   @include flex-center;
 
-  flex-direction: column;
-  width: $board-width;
-
-  &__game {
-    @include flex-center;
-
-    justify-content: space-between;
-    width: 100%;
-    padding: 20px 0;
-
-    cursor: default;
-    animation: slide-down $animation-speed-slow ease-in;
-  }
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px 0;
+  cursor: default;
+  animation: slide-down $animation-speed-slow ease-in;
 
   &__controls {
     @include flex-center;
