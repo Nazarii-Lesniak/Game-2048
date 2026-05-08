@@ -1,0 +1,45 @@
+@import './variables';
+@import './mixins';
+
+.message {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+
+  font-size: $font-size-message;
+  text-align: center;
+  color: $text-dark;
+
+  background: $color-white;
+  border: 1px solid rgba(119, 110, 101, 0.1);
+  border-radius: $radius-main;
+  box-shadow: $shadow-main;
+
+  @include hover-effect;
+
+  transition:
+    translate $transition-speed ease-in-out,
+    transform $animation-speed-fast ease-in-out;
+
+  &-container {
+    width: 100%;
+    height: 150px;
+
+    cursor: default;
+    animation: slide-down $animation-speed-slow ease-out forwards;
+  }
+
+  &-win {
+    color: $color-white;
+    background: $color-gold;
+    border: none;
+    box-shadow: 0 8px 25px rgba(237, 194, 46, 0.3);
+  }
+
+  &-lose {
+    color: $color-white;
+    background: $color-error;
+    border: none;
+    box-shadow: 0 8px 25px rgba(248, 116, 116, 0.3);
+  }
+}

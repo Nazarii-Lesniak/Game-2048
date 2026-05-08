@@ -1,0 +1,44 @@
+@import './variables';
+
+@for $row from 0 through 3 {
+  @for $column from 0 through 3 {
+    .tile-position-#{$column}-#{$row} {
+      $x-pos: $column * ($tile-size + $tile-gap);
+      $y-pos: $row * ($tile-size + $tile-gap);
+
+      translate: $x-pos $y-pos;
+    }
+  }
+}
+
+@keyframes appear {
+  0% {
+    scale: 0;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes pop {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

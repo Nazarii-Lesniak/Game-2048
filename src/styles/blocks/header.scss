@@ -1,0 +1,114 @@
+@import './variables';
+@import './mixins';
+
+.header {
+  @include flex-center;
+
+  flex-direction: column;
+  width: $board-width;
+
+  &__game {
+    @include flex-center;
+
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 0;
+
+    cursor: default;
+    animation: slide-down $animation-speed-slow ease-in;
+  }
+
+  &__controls {
+    @include flex-center;
+
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  &__info {
+    @include flex-center;
+
+    flex-direction: column;
+
+    box-sizing: border-box;
+    width: $tile-size;
+    height: $tile-size;
+    margin: 0 0 0 auto;
+
+    font-size: $font-size-label;
+    text-align: center;
+    text-transform: uppercase;
+    color: $text-light;
+
+    background: $color-bg-board;
+    border-radius: $radius-main;
+    box-shadow: $shadow-main;
+
+    transition: transform $transition-speed ease-in-out;
+
+    @include hover-effect;
+  }
+
+  &__score {
+    font-size: $font-size-score;
+    font-weight: 900;
+    line-height: 1.2;
+    color: $text-light;
+  }
+
+  &__button {
+    width: $tile-size;
+    height: $tile-size;
+
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    color: $text-light;
+
+    cursor: pointer;
+    border: none;
+    border-radius: $radius-main;
+
+    &--start {
+      background: $color-success;
+      box-shadow: $shadow-main;
+
+      transition:
+        transform $transition-speed ease,
+        filter $transition-speed ease,
+        box-shadow $transition-speed ease;
+
+      &:hover {
+        filter: brightness(110%);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(45, 156, 94, 0.4);
+      }
+
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+
+    &--restart {
+      background: $color-error;
+      box-shadow: $shadow-main;
+
+      transition:
+        filter $transition-speed ease,
+        transform $transition-speed ease,
+        box-shadow $transition-speed ease;
+
+      &:hover {
+        filter: brightness(110%);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(222, 42, 39, 0.4);
+      }
+
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+}

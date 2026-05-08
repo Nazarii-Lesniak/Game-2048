@@ -1,0 +1,15 @@
+@import './variables';
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-effect {
+  &:hover {
+    filter: brightness(105%);
+    transform: translateY(-5px);
+    box-shadow: $shadow-hover;
+  }
+}

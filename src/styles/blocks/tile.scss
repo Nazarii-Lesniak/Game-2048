@@ -1,0 +1,51 @@
+@import './variables';
+@import './mixins';
+
+.tile-container {
+  position: absolute;
+  top: $tile-gap;
+  left: $tile-gap;
+
+  width: calc(100% - (#{$tile-gap} * 2));
+  height: calc(100% - (#{$tile-gap} * 2));
+}
+
+.tile-new {
+  animation: appear $animation-speed-fast ease-in-out;
+}
+
+.tile-merged {
+  animation: pop $animation-speed-fast ease-in-out;
+}
+
+.tile {
+  position: absolute;
+
+  box-sizing: border-box;
+  width: $tile-size;
+  height: $tile-size;
+
+  line-height: $tile-size;
+  text-align: center;
+  color: $text-dark;
+
+  border-radius: $radius-main;
+  box-shadow: $shadow-main;
+
+  user-select: none;
+  transition:
+    translate $transition-speed ease-in-out,
+    transform $animation-speed-fast ease-in-out;
+
+  @include hover-effect;
+
+  @each $value, $color in $tile-colors {
+    &--#{$value} {
+      background: $color;
+
+      @if $value > 4 {
+        color: $text-light;
+      }
+    }
+  }
+}

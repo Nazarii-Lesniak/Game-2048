@@ -1,0 +1,33 @@
+@import './variables';
+
+.game-board {
+  position: relative;
+
+  box-sizing: border-box;
+  width: fit-content;
+  padding: $tile-gap;
+
+  background: $color-bg-board;
+  border: none;
+  border-radius: $radius-main;
+  box-shadow: $shadow-main;
+
+  touch-action: none;
+  animation: slide-down $animation-speed-slow ease-out forwards;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: repeat(4, $tile-size);
+  grid-template-rows: repeat(4, $tile-size);
+  gap: $tile-gap;
+}
+
+.game-cell {
+  width: $tile-size;
+  height: $tile-size;
+
+  background: $color-bg-cell;
+  border-radius: $radius-main;
+  box-shadow: inset -10px -10px 6px rgba(0, 0, 0, 0.05);
+}
