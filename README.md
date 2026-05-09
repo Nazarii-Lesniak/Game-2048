@@ -6,7 +6,7 @@ This is an advanced implementation of the classic **2048** game, built with a fo
 
 ## 🔗 Live Preview
 You can try the game by following the link:
-👉 [**PROJECT DEMO**](https://nazarii-lesniak.github.io/Game-2048/)
+👉 [**PROJECT DEMO**](https://nazarii-lesniak.github.io/game-2048)
 
 ---
 
@@ -32,7 +32,7 @@ To run the project locally, follow these steps:
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/nazarii-lesniak/Game-2048.git
+    git clone https://github.com/nazarii-lesniak/game-2048.git
     cd Game-2048
     ```
 
