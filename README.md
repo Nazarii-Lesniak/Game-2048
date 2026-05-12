@@ -22,7 +22,7 @@ The project is based on the classic design of the 2048 game with a responsive la
 * **HTML5:** Semantic markup using modern tags.
 * **BEM Methodology:** Strict adherence to class naming standards to maintain clean code.
 * **LocalStorage API:** Implemented data persistence to save game state.
-* **Gulp:** Build automation and asset optimization.
+* **NPM Scripts:** Build automation and asset optimization.
 
 ---
 
